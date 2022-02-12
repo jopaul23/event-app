@@ -25,4 +25,15 @@ class EventApi {
     }
     return eventList;
   }
+
+  static Future<int> addEvent(Map<String, dynamic> eventMap) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("auth-token");
+    Uri uri = Uri.parse("http://192.168.56.1:4051/api/events/post-event");
+
+    Map<String, String> header = {"auth-token": token!};
+    http.Response response =
+        await http.post(uri, body: eventMap, headers: header);
+    return response.statusCode;
+  }
 }
