@@ -11,27 +11,24 @@ class SquareButton extends StatelessWidget {
   }) : super(key: key);
   final VoidCallback onPressed;
   final String text;
+
   final Color color;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print("pressed");
-      },
+      onTap: onPressed,
       child: Container(
         constraints: const BoxConstraints(
-          minHeight: 5.0,
-          minWidth: 5.0,
-          maxHeight: 30.0,
-          maxWidth: 30.0,
+          maxHeight: 40.0,
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: green,
+          color: color,
         ),
         child: Text(
-          "Add Event",
+          text,
           style: TextStyle(
             color: white,
             fontWeight: FontWeight.bold,

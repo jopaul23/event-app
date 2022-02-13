@@ -16,11 +16,12 @@ class EventAddController extends GetxController {
     Map<String, dynamic> eventMap = {
       "name": eventName,
       "userEmail": email!,
-      "startingTime": startingTime,
-      "endingTime": endingTime,
+      "startingTime": startingTime!.toIso8601String(),
+      "endingTime": endingTime!.toIso8601String(),
       "startingLocation": startingLocation,
       "endingLocation": endingLocation
     };
+
     int status = await EventApi.addEvent(eventMap);
   }
 

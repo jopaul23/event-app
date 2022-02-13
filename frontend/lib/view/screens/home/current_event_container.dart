@@ -1,9 +1,11 @@
 import 'package:event_creation/controllers/event_add_controller.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
+import 'package:event_creation/view/screens/home/add_event_overlay.dart';
 import 'package:event_creation/view/widgets/buttons/square_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class CurrentEventContainer extends StatelessWidget {
@@ -15,7 +17,6 @@ class CurrentEventContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       height: 120,
-      width: double.infinity,
       decoration: BoxDecoration(
           color: white,
           borderRadius: BorderRadius.circular(8),
@@ -38,11 +39,10 @@ class CurrentEventContainer extends StatelessWidget {
             ),
           ),
           Text(
-            EventController.timeToHM(eventAddController.startingTime!),
+            "Started at ${EventController.timeToHM(eventAddController.startingTime!)}",
             style: TextStyle(
-              color: textColor1,
-              fontWeight: FontWeight.bold,
-              fontSize: 16.sp,
+              color: primaryBlue,
+              fontSize: 14.sp,
             ),
           ),
           Row(
@@ -50,12 +50,26 @@ class CurrentEventContainer extends StatelessWidget {
               SquareButton(
                 color: green,
                 text: "Mark as Completed",
-                onPressed: () => print("completed"),
+                onPressed: () async {
+                  eventAddController.endingTime = DateTime.now();
+                  Position location =
+                      await EventAddController.determinePosition();
+                  eventAddController.endingLocation =
+                      "${location.latitude},${location.longitude}";
+                  eventAddController.addEvent();
+                },
+              ),
+              const SizedBox(
+                width: 10,
               ),
               SquareButton(
                 color: red,
                 text: "cancel",
-                onPressed: () => print("completed"),
+                onPressed: () {
+                  eventAddController.eventName = "";
+                  eventAddController.startingLocation = "";
+                  eventAddController.update();
+                },
               )
             ],
           )

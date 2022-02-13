@@ -5,6 +5,7 @@ import 'package:event_creation/view/screens/home/event_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -89,9 +90,11 @@ class _AddEventOverlayState extends State<AddEventOverlay> {
                           print("pressed");
                           addEventController.eventName = nameController.text;
                           addEventController.startingTime = DateTime.now();
+                          Position location =
+                              await EventAddController.determinePosition();
                           addEventController.startingLocation =
-                              (await EventAddController.determinePosition())
-                                  as String;
+                              "${location.latitude},${location.longitude}";
+                          addEventController.update();
                           widget.overlay.remove();
                         },
                         child: Container(

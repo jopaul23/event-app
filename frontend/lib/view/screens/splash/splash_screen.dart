@@ -1,5 +1,6 @@
 import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/home/home.dart';
+import 'package:event_creation/view/screens/registration/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.off(() => const Home());
       print("email exists");
     } else {
-      Get.off(() => const Home());
+      Get.off(() => const SigninPage());
       print("email donot exist");
     }
   }
