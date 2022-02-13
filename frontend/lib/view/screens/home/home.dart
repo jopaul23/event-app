@@ -5,11 +5,14 @@ import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/home/add_event_overlay.dart';
 import 'package:event_creation/view/screens/home/current_event_container.dart';
 import 'package:event_creation/view/screens/home/event_container.dart';
+import 'package:event_creation/view/screens/registration/login/login_page.dart';
 import 'package:event_creation/view/widgets/buttons/circle_add_btn.dart';
+import 'package:event_creation/view/widgets/buttons/square_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -34,13 +37,29 @@ class Home extends StatelessWidget {
           backgroundColor: bgColor,
           elevation: 0,
           leadingWidth: 25,
-          title: Text(
-            "Event App",
-            style: TextStyle(
-              color: primaryBlue,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
+          title: Row(
+            children: [
+              Text(
+                "Event App",
+                style: TextStyle(
+                  color: primaryBlue,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              SquareButton(
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.clear();
+                  Get.off(() => const SigninPage());
+                },
+                text: "logout",
+                color: red,
+                width: 90,
+              )
+            ],
           ),
         ),
         floatingActionButton:
