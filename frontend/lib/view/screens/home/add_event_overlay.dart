@@ -91,6 +91,7 @@ class _AddEventOverlayState extends State<AddEventOverlay> {
                           print("pressed");
                           addEventController.eventName = nameController.text;
                           addEventController.startingTime = DateTime.now();
+                          addEventController.update();
                           EventAddController.determinePosition()
                               .then((Position location) {
                             addEventController.startingLocation =

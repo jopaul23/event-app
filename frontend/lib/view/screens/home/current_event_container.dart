@@ -6,9 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class CurrentEventContainer extends StatelessWidget {
+class CurrentEventContainer extends StatefulWidget {
   const CurrentEventContainer({Key? key}) : super(key: key);
+
+  @override
+  State<CurrentEventContainer> createState() => _CurrentEventContainerState();
+}
+
+class _CurrentEventContainerState extends State<CurrentEventContainer> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +55,45 @@ class CurrentEventContainer extends StatelessWidget {
           ),
           Row(
             children: [
-              SquareButton(
-                color: green,
-                text: "Mark as Completed",
-                onPressed: () async {
-                  eventAddController.endingTime = DateTime.now();
-                  Position location =
-                      await EventAddController.determinePosition();
-                  eventAddController.endingLocation =
-                      "${location.latitude},${location.longitude}";
-                  eventAddController.addEvent();
-                },
-              ),
+              isLoading
+                  ? Container(
+                      width: 200,
+                      constraints: const BoxConstraints(
+                        maxHeight: 40.0,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: green,
+                      ),
+                      child: const SpinKitRing(
+                        lineWidth: 5,
+                        color: Colors.white,
+                        // size: 50.0,
+                      ),
+                    )
+                  : SquareButton(
+                      width: 200,
+                      color: green,
+                      text: "Mark as Completed",
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        eventAddController.endingTime = DateTime.now();
+                        Position location =
+                            await EventAddController.determinePosition();
+                        eventAddController.endingLocation =
+                            "${location.latitude},${location.longitude}";
+                        eventAddController.addEvent();
+                      },
+                    ),
               const SizedBox(
                 width: 10,
               ),
               SquareButton(
+                width: 70,
                 color: red,
                 text: "cancel",
                 onPressed: () {

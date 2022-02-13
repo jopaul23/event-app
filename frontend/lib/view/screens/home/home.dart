@@ -67,13 +67,24 @@ class Home extends StatelessWidget {
                 height: 10,
               ),
               GetBuilder<EventController>(builder: (context) {
+                bool isEmpty = eventController.eventList.isEmpty;
                 List<Event> eventList = eventController.eventList;
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: eventList.length,
-                      itemBuilder: (context, index) =>
-                          EventContainer(eventList: eventList, index: index)),
-                );
+                return isEmpty
+                    ? SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset("assets/svg/empty.svg"),
+                            const Text("No events completed")
+                          ],
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                            itemCount: eventList.length,
+                            itemBuilder: (context, index) => EventContainer(
+                                eventList: eventList, index: index)),
+                      );
               }),
             ],
           ),

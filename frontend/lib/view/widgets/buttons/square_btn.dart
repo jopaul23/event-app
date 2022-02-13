@@ -8,7 +8,9 @@ class SquareButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     required this.color,
+    required this.width,
   }) : super(key: key);
+  final double width;
   final VoidCallback onPressed;
   final String text;
 
@@ -18,6 +20,7 @@ class SquareButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
+        width: width,
         constraints: const BoxConstraints(
           maxHeight: 40.0,
         ),

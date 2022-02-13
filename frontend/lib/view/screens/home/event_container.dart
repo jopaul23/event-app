@@ -18,11 +18,6 @@ class EventContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (eventList.length == 1)
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                  EventController.timeToDDMMYY(eventList[0].startingTime))),
         if (index > 0)
           eventList[index].startingTime.day !=
                   eventList[index - 1].startingTime.day
