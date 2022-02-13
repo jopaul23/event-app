@@ -1,7 +1,6 @@
 import 'package:event_creation/controllers/event_add_controller.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
-import 'package:event_creation/view/screens/home/add_event_overlay.dart';
 import 'package:event_creation/view/widgets/buttons/square_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +14,7 @@ class CurrentEventContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final eventAddController = Get.find<EventAddController>();
     return Container(
+      margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.all(8),
       height: 120,
       decoration: BoxDecoration(

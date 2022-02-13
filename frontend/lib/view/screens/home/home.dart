@@ -26,6 +26,7 @@ class Home extends StatelessWidget {
 
     final eventController = Get.put(EventController());
     final eventAddController = Get.put(EventAddController());
+    eventAddController.context = context;
     eventController.getEvents();
     return SafeArea(
       child: Scaffold(
@@ -57,9 +58,6 @@ class Home extends StatelessWidget {
               right: defaultPadding),
           child: Column(
             children: [
-              const SizedBox(
-                height: 5,
-              ),
               GetBuilder<EventAddController>(builder: (context) {
                 return eventAddController.eventName != ""
                     ? const CurrentEventContainer()

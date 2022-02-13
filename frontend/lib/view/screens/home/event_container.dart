@@ -32,6 +32,12 @@ class EventContainer extends StatelessWidget {
                       eventList[index].startingTime)),
                 )
               : const SizedBox(),
+        if (index == 0)
+          Padding(
+            padding: const EdgeInsets.only(top: defaultPadding),
+            child:
+                Text(EventController.timeToDDMMYY(eventList[0].startingTime)),
+          ),
         Container(
           margin: const EdgeInsets.only(top: defaultPadding),
           padding: const EdgeInsets.all(8),

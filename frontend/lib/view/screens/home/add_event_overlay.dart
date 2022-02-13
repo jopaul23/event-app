@@ -2,6 +2,7 @@ import 'package:event_creation/controllers/event_add_controller.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/home/event_container.dart';
+import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -90,11 +91,18 @@ class _AddEventOverlayState extends State<AddEventOverlay> {
                           print("pressed");
                           addEventController.eventName = nameController.text;
                           addEventController.startingTime = DateTime.now();
-                          Position location =
-                              await EventAddController.determinePosition();
-                          addEventController.startingLocation =
-                              "${location.latitude},${location.longitude}";
-                          addEventController.update();
+                          EventAddController.determinePosition()
+                              .then((Position location) {
+                            addEventController.startingLocation =
+                                "${location.latitude},${location.longitude}";
+                            addEventController.update();
+                          });
+                          showToast(
+                              context: context,
+                              title: "successfully created evnet",
+                              description: "",
+                              icon: "assets/svg/tick.svg",
+                              color: primaryBlue);
                           widget.overlay.remove();
                         },
                         child: Container(

@@ -19,8 +19,8 @@ class Event {
     return Event(
       name: json["name"],
       userEmail: json["userEmail"],
-      startingTime: DateTime.parse(json["startingTime"]),
-      endingTime: DateTime.parse(json["endingTime"]),
+      startingTime: DateTime.parse(json["startingTime"]).toLocal(),
+      endingTime: DateTime.parse(json["endingTime"]).toLocal(),
       startingLocation: json["startingLocation"],
       endingLocation: json["endingLocation"],
     );
