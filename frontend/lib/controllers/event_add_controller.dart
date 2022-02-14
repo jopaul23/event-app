@@ -12,12 +12,42 @@ import 'package:shared_preferences/shared_preferences.dart';
 class EventAddController extends GetxController {
   final eventController = Get.find<EventController>();
 
+  bool am = true;
+  int minute = 0;
+  int hour = 9;
+  DateTime dueTime = DateTime(DateTime.now().year, DateTime.now().month,
+      DateTime.now().day, 23, 59, 0, 0, 0);
+
   String eventName = '';
   String startingLocation = '';
   String endingLocation = '';
+  String school = '';
   DateTime? startingTime;
   DateTime? endingTime;
   BuildContext? context;
+
+  void noonSelection() {
+    am = !am;
+    dueTime = toDateTime(hour, minute, am, dueTime);
+    debugPrint(dueTime.toString());
+    update();
+  }
+
+  DateTime toDateTime(int hr, int min, bool isAm, DateTime date) {
+    if (!isAm) {
+      if (hr != 12) {
+        hr += 6;
+      }
+    } else {
+      if (hr == 12) {
+        hr -= 12;
+      }
+    }
+    DateTime newDateTime = DateTime(date.year, date.month, date.day, hr, min,
+        date.second, date.millisecond, date.microsecond);
+    return newDateTime;
+  }
+
   addEvent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? email = prefs.getString("email");
@@ -28,7 +58,8 @@ class EventAddController extends GetxController {
       "startingTime": startingTime!.toIso8601String(),
       "endingTime": endingTime!.toIso8601String(),
       "startingLocation": startingLocation,
-      "endingLocation": endingLocation
+      "endingLocation": endingLocation,
+      "school": school
     };
 
     int status = await EventApi.addEvent(eventMap);

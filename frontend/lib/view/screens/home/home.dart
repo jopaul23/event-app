@@ -2,6 +2,7 @@ import 'package:event_creation/controllers/event_add_controller.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/models/event.dart';
 import 'package:event_creation/view/constants/constants.dart';
+import 'package:event_creation/view/screens/addEvent/add_event_page.dart';
 import 'package:event_creation/view/screens/home/add_event_overlay.dart';
 import 'package:event_creation/view/screens/home/current_event_container.dart';
 import 'package:event_creation/view/screens/home/event_container.dart';
@@ -67,7 +68,7 @@ class Home extends StatelessWidget {
           return eventAddController.eventName != ""
               ? const SizedBox()
               : CircleAddBtn(
-                  onPressed: _showOverLay,
+                  onPressed: () => Get.to(const AddEventPage()),
                 );
         }),
         body: Padding(

@@ -13,6 +13,10 @@ const eventSchemaa = mongoose.Schema({
         min :10,
         max : 255,
     },
+    school:{
+        type:String,
+        required:[true,"school required"]
+    },
     startingTime : {
         type :Date,
     },
