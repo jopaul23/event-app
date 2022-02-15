@@ -101,6 +101,30 @@ class _EndEventOverlayState extends State<EndEventOverlay> {
                                       addEventController.endingTime);
 
                               print(addEventController.endingTime);
+                              if (addEventController.endingTime
+                                  .isAfter(DateTime.now())) {
+                                showToast(
+                                  context: context,
+                                  title:
+                                      "ending time should not exceed current time",
+                                  description: "",
+                                  icon: "assets/svg/warning.svg",
+                                  color: toastYellow,
+                                );
+                              } else if (addEventController.endingTime
+                                  .isBefore(addEventController.startingTime)) {
+                                showToast(
+                                  context: context,
+                                  title:
+                                      "ending time should be after starting time",
+                                  description: "",
+                                  icon: "assets/svg/warning.svg",
+                                  color: toastYellow,
+                                );
+                              } else {
+                                addEventController.addEvent();
+                                widget.overlay.remove();
+                              }
                             },
                             text: "add",
                             color: primaryBlue,

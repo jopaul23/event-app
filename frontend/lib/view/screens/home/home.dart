@@ -9,9 +9,11 @@ import 'package:event_creation/view/screens/home/event_container.dart';
 import 'package:event_creation/view/screens/registration/login/login_page.dart';
 import 'package:event_creation/view/widgets/buttons/circle_add_btn.dart';
 import 'package:event_creation/view/widgets/buttons/square_btn.dart';
+import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,9 +45,32 @@ class Home extends StatelessWidget {
               const Spacer(),
               SquareButton(
                 onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.clear();
+                  eventAddController.endingTime = DateTime.now();
+                  if (eventAddController.endingTime
+                      .isBefore(eventAddController.startingTime)) {
+                    showToast(
+                      context: context,
+                      title: "ending time should be after starting time",
+                      description: "",
+                      icon: "assets/svg/warning.svg",
+                      color: toastYellow,
+                    );
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.clear();
+                  } else {
+                    Position location =
+                        await EventAddController.determinePosition();
+                    eventAddController.endingLocation =
+                        "${location.latitude},${location.longitude}";
+                    eventAddController.addEvent();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    Future.delayed(Duration(seconds: 10)).whenComplete(() {
+                      prefs.clear();
+                    });
+                  }
+
                   Get.off(() => const SigninPage());
                 },
                 text: "logout",
