@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:event_creation/api/event_api.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/main.dart';
@@ -15,28 +16,51 @@ class EventAddController extends GetxController {
   bool am = true;
   int minute = 0;
   int hour = 9;
-  DateTime dueTime = DateTime(DateTime.now().year, DateTime.now().month,
-      DateTime.now().day, 23, 59, 0, 0, 0);
+  DateTime startingTime = DateTime(DateTime.now().year, DateTime.now().month,
+      DateTime.now().day, 9, 0, 0, 0, 0);
 
   String eventName = '';
   String startingLocation = '';
   String endingLocation = '';
   String school = '';
-  DateTime? startingTime;
+  // DateTime? startingTime;
   DateTime? endingTime;
-  BuildContext? context;
+  // BuildContext? context;
+
+  String geoStartingCodedLocation = "";
+  String endingGeocodedLocation = "";
+  reset() {
+    am = true;
+    minute = 0;
+    hour = 9;
+    startingTime = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, 9, 0, 0, 0, 0);
+
+    eventName = '';
+    startingLocation = '';
+    endingLocation = '';
+    school = '';
+    // DateTime? startingTime;
+    // BuildContext? context;
+
+    geoStartingCodedLocation = "";
+  }
+
+  void updateTime() {
+    startingTime = toDateTime(hour, minute, am, startingTime);
+  }
 
   void noonSelection() {
     am = !am;
-    dueTime = toDateTime(hour, minute, am, dueTime);
-    debugPrint(dueTime.toString());
+    startingTime = toDateTime(hour, minute, am, startingTime);
+    debugPrint(startingTime.toString());
     update();
   }
 
   DateTime toDateTime(int hr, int min, bool isAm, DateTime date) {
     if (!isAm) {
       if (hr != 12) {
-        hr += 6;
+        hr += 12;
       }
     } else {
       if (hr == 12) {
@@ -55,7 +79,7 @@ class EventAddController extends GetxController {
     Map<String, dynamic> eventMap = {
       "name": eventName,
       "userEmail": email!,
-      "startingTime": startingTime!.toIso8601String(),
+      "startingTime": startingTime.toIso8601String(),
       "endingTime": endingTime!.toIso8601String(),
       "startingLocation": startingLocation,
       "endingLocation": endingLocation,
@@ -66,7 +90,7 @@ class EventAddController extends GetxController {
     if (status == 200) {
       eventName = "";
       showToast(
-          context: context!,
+          context: Get.overlayContext!,
           title: "successfully added event",
           description: "",
           icon: "assets/svg/tick.svg",
@@ -74,7 +98,7 @@ class EventAddController extends GetxController {
     } else {
       print("unexpected error occured");
       showToast(
-          context: context!,
+          context: Get.overlayContext!,
           title: "event creation failed",
           description: "",
           icon: "assets/svg/warning.svg",
@@ -104,5 +128,24 @@ class EventAddController extends GetxController {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     return await Geolocator.getCurrentPosition();
+  }
+
+  static Future<String> geocodeLocation(String location) async {
+    String locationName = "";
+    List<String> positions = location.split(",");
+    try {
+      String url =
+          "https://nominatim.openstreetmap.org/reverse?format=json&lat=${positions[0]}&lon=${positions[1]}&zoom=18&addressdetails=1";
+      final response = await Dio().get(url);
+      locationName = "${response.data["display_name"].toString()}}";
+      print("---------------response for geocoding--------------");
+      print(url);
+      print(response.data);
+      print("-----------end for response for geocoding--------------");
+    } catch (e) {
+      print(e);
+      locationName = location;
+    }
+    return locationName;
   }
 }

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterApi {
-  static const url = "http://159.89.161.168:4050";
+  static const url = "http://159.89.161.168:4051";
 
   static Future<Map<String, dynamic>> login(
       {required String email, required String password}) async {

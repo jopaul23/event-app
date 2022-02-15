@@ -1,10 +1,18 @@
+import 'dart:convert';
+
+import 'package:event_creation/controllers/event_add_controller.dart';
+import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/addEvent/event_form.dart';
 import 'package:event_creation/view/screens/addEvent/time_control_widget.dart';
+import 'package:event_creation/view/screens/home/home.dart';
 import 'package:event_creation/view/widgets/buttons/rounded_rect_btns.dart';
+import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 
 class AddEventPage extends StatefulWidget {
   const AddEventPage({Key? key}) : super(key: key);
@@ -14,6 +22,9 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageState extends State<AddEventPage> {
+  final addEventController = Get.find<EventAddController>();
+  final eventFormKey = GlobalKey<EventFormState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,15 +76,61 @@ class _AddEventPageState extends State<AddEventPage> {
               const SizedBox(
                 height: defaultPadding,
               ),
-              EventForm(size: MediaQuery.of(context).size),
+              EventForm(key: eventFormKey, size: MediaQuery.of(context).size),
               const SizedBox(
                 height: defaultPadding,
               ),
               PrimaryButton(
-                  onpressed: () {
-                    print("pressed");
-                  },
-                  text: "create event")
+                onpressed: () {
+                  addEventController.eventName = eventFormKey
+                      .currentState!.eventKey.currentState!.myController.text;
+                  addEventController.school = eventFormKey
+                      .currentState!.schoolKey.currentState!.myController.text;
+                  if (DateTime.now().isAfter(addEventController.startingTime)) {
+                    showToast(
+                      context: context,
+                      title: "time should be after current time",
+                      description: "",
+                      icon: "assets/svg/warning.svg",
+                      color: toastYellow,
+                    );
+                  } else if (addEventController.eventName == "" ||
+                      addEventController.school == "") {
+                    showToast(
+                      context: context,
+                      title: "all fields are required",
+                      description: "",
+                      icon: "assets/svg/warning.svg",
+                      color: toastYellow,
+                    );
+                  } else {
+                    showToast(
+                        context: context,
+                        title: "event created successfully",
+                        description: "",
+                        icon: "assets/svg/tick.svg",
+                        color: primaryBlue);
+
+                    EventAddController.determinePosition()
+                        .then((Position location) async {
+                      addEventController.startingLocation =
+                          "${location.latitude},${location.longitude}";
+                      addEventController.geoStartingCodedLocation =
+                          await EventAddController.geocodeLocation(
+                              addEventController.startingLocation);
+                      print("----------------geocoded location---------------");
+                      print(addEventController.geoStartingCodedLocation);
+                      print(
+                          "-------------end geocoded location---------------");
+
+                      addEventController.update();
+                    });
+
+                    Get.off(const Home());
+                  }
+                },
+                text: "create event",
+              )
             ]),
           ),
         ),

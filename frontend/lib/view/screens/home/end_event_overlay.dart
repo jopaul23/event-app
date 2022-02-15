@@ -1,7 +1,5 @@
 import 'package:event_creation/controllers/event_add_controller.dart';
-import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
-import 'package:event_creation/view/screens/home/event_container.dart';
 import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,15 +8,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddEventOverlay extends StatefulWidget {
+class EndEventOverlay extends StatefulWidget {
   final OverlayEntry overlay;
-  const AddEventOverlay({Key? key, required this.overlay}) : super(key: key);
+  const EndEventOverlay({Key? key, required this.overlay}) : super(key: key);
 
   @override
-  State<AddEventOverlay> createState() => _AddEventOverlayState();
+  State<EndEventOverlay> createState() => _EndEventOverlayState();
 }
 
-class _AddEventOverlayState extends State<AddEventOverlay> {
+class _EndEventOverlayState extends State<EndEventOverlay> {
   final nameController = TextEditingController();
   final addEventController = Get.find<EventAddController>();
   @override

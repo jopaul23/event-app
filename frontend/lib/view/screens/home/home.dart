@@ -3,7 +3,7 @@ import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/models/event.dart';
 import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/addEvent/add_event_page.dart';
-import 'package:event_creation/view/screens/home/add_event_overlay.dart';
+import 'package:event_creation/view/screens/home/end_event_overlay.dart';
 import 'package:event_creation/view/screens/home/current_event_container.dart';
 import 'package:event_creation/view/screens/home/event_container.dart';
 import 'package:event_creation/view/screens/registration/login/login_page.dart';
@@ -20,17 +20,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _showOverLay() {
-      late OverlayEntry addEventOverlay;
-      addEventOverlay = OverlayEntry(
-          builder: (context) => AddEventOverlay(overlay: addEventOverlay));
-
-      Overlay.of(context)?.insert(addEventOverlay);
-    }
-
     final eventController = Get.put(EventController());
     final eventAddController = Get.put(EventAddController());
-    eventAddController.context = context;
+    // eventAddController.context = context;
     eventController.getEvents();
     return SafeArea(
       child: Scaffold(
