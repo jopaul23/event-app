@@ -7,6 +7,7 @@ import 'package:event_creation/view/screens/addEvent/event_form.dart';
 import 'package:event_creation/view/screens/addEvent/time_control_widget.dart';
 import 'package:event_creation/view/screens/home/home.dart';
 import 'package:event_creation/view/widgets/buttons/rounded_rect_btns.dart';
+import 'package:event_creation/view/widgets/time_selector_widget.dart';
 import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +25,7 @@ class AddEventPage extends StatefulWidget {
 class _AddEventPageState extends State<AddEventPage> {
   final addEventController = Get.find<EventAddController>();
   final eventFormKey = GlobalKey<EventFormState>();
+  final timeKey = GlobalKey<TimeControlWidgetState>();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,9 @@ class _AddEventPageState extends State<AddEventPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const TimeContainer(),
+                    TimeControlWidget(
+                      key: timeKey,
+                    )
                   ],
                 ),
               ),
@@ -86,6 +90,14 @@ class _AddEventPageState extends State<AddEventPage> {
                       .currentState!.eventKey.currentState!.myController.text;
                   addEventController.school = eventFormKey
                       .currentState!.schoolKey.currentState!.myController.text;
+                  bool am = timeKey.currentState!.isAm;
+                  int hr =
+                      int.parse(timeKey.currentState!.hourTimeController.text);
+                  int min =
+                      int.parse(timeKey.currentState!.minTimeController.text);
+                  addEventController.startingTime = addEventController
+                      .toDateTime(hr, min, am, addEventController.startingTime);
+
                   if (DateTime.now().isAfter(addEventController.startingTime)) {
                     showToast(
                       context: context,

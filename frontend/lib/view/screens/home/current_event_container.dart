@@ -1,7 +1,7 @@
 import 'package:event_creation/controllers/event_add_controller.dart';
 import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
-import 'package:event_creation/view/screens/home/end_event_overlay.dart';
+import 'package:event_creation/view/screens/home/endEventOverlay/end_event_overlay.dart';
 import 'package:event_creation/view/widgets/buttons/square_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -125,6 +125,11 @@ class _CurrentEventContainerState extends State<CurrentEventContainer> {
                         await EventAddController.determinePosition();
                     eventAddController.endingLocation =
                         "${location.latitude},${location.longitude}";
+
+                    eventAddController.endingGeocodedLocation =
+                        await EventAddController.geocodeLocation(
+                            eventAddController.endingLocation);
+                    eventAddController.update();
                   },
                 ),
                 const SizedBox(

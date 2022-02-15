@@ -24,11 +24,13 @@ class EventAddController extends GetxController {
   String endingLocation = '';
   String school = '';
   // DateTime? startingTime;
-  DateTime? endingTime;
+  DateTime endingTime = DateTime(DateTime.now().year, DateTime.now().month,
+      DateTime.now().day, 9, 0, 0, 0, 0);
   // BuildContext? context;
 
   String geoStartingCodedLocation = "";
   String endingGeocodedLocation = "";
+
   reset() {
     am = true;
     minute = 0;
@@ -80,7 +82,7 @@ class EventAddController extends GetxController {
       "name": eventName,
       "userEmail": email!,
       "startingTime": startingTime.toIso8601String(),
-      "endingTime": endingTime!.toIso8601String(),
+      "endingTime": endingTime.toIso8601String(),
       "startingLocation": startingLocation,
       "endingLocation": endingLocation,
       "school": school
