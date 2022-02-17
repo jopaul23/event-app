@@ -84,64 +84,69 @@ class _AddEventPageState extends State<AddEventPage> {
               const SizedBox(
                 height: defaultPadding,
               ),
-              PrimaryButton(
-                onpressed: () {
-                  addEventController.eventName = eventFormKey
-                      .currentState!.eventKey.currentState!.myController.text;
-                  addEventController.school = eventFormKey
-                      .currentState!.schoolKey.currentState!.myController.text;
-                  bool am = timeKey.currentState!.isAm;
-                  int hr =
-                      int.parse(timeKey.currentState!.hourTimeController.text);
-                  int min =
-                      int.parse(timeKey.currentState!.minTimeController.text);
-                  addEventController.startingTime = addEventController
-                      .toDateTime(hr, min, am, addEventController.startingTime);
+              Center(
+                child: PrimaryButton(
+                  onpressed: () {
+                    addEventController.eventName = eventFormKey
+                        .currentState!.eventKey.currentState!.myController.text;
+                    addEventController.school = eventFormKey.currentState!
+                        .schoolKey.currentState!.myController.text;
+                    bool am = timeKey.currentState!.isAm;
+                    int hr = int.parse(
+                        timeKey.currentState!.hourTimeController.text);
+                    int min =
+                        int.parse(timeKey.currentState!.minTimeController.text);
+                    addEventController.startingTime =
+                        addEventController.toDateTime(
+                            hr, min, am, addEventController.startingTime);
 
-                  if (DateTime.now().isAfter(addEventController.startingTime)) {
-                    showToast(
-                      context: context,
-                      title: "time should be after current time",
-                      description: "",
-                      icon: "assets/svg/warning.svg",
-                      color: toastYellow,
-                    );
-                  } else if (addEventController.eventName == "" ||
-                      addEventController.school == "") {
-                    showToast(
-                      context: context,
-                      title: "all fields are required",
-                      description: "",
-                      icon: "assets/svg/warning.svg",
-                      color: toastYellow,
-                    );
-                  } else {
-                    showToast(
+                    if (DateTime.now()
+                        .isAfter(addEventController.startingTime)) {
+                      showToast(
                         context: context,
-                        title: "event created successfully",
+                        title: "time should be after current time",
                         description: "",
-                        icon: "assets/svg/tick.svg",
-                        color: primaryBlue);
+                        icon: "assets/svg/warning.svg",
+                        color: toastYellow,
+                      );
+                    } else if (addEventController.eventName == "" ||
+                        addEventController.school == "") {
+                      showToast(
+                        context: context,
+                        title: "all fields are required",
+                        description: "",
+                        icon: "assets/svg/warning.svg",
+                        color: toastYellow,
+                      );
+                    } else {
+                      showToast(
+                          context: context,
+                          title: "event created successfully",
+                          description: "",
+                          icon: "assets/svg/tick.svg",
+                          color: primaryBlue);
 
-                    EventAddController.determinePosition()
-                        .then((Position location) async {
-                      addEventController.startingLocation =
-                          "${location.latitude},${location.longitude}";
-                      addEventController.geoStartingCodedLocation =
-                          await EventAddController.geocodeLocation(
-                              addEventController.startingLocation);
-                      print("----------------geocoded location---------------");
-                      print(addEventController.geoStartingCodedLocation);
-                      print(
-                          "-------------end geocoded location---------------");
+                      EventAddController.determinePosition()
+                          .then((Position location) async {
+                        addEventController.startingLocation =
+                            "${location.latitude},${location.longitude}";
+                        addEventController.geoStartingCodedLocation =
+                            await EventAddController.geocodeLocation(
+                                addEventController.startingLocation);
+                        print(
+                            "----------------geocoded location---------------");
+                        print(addEventController.geoStartingCodedLocation);
+                        print(
+                            "-------------end geocoded location---------------");
+                        addEventController.addEvent();
+                        addEventController.update();
+                      });
 
-                      addEventController.update();
-                    });
-
-                    Get.off(const Home());
-                  }
-                },
-                text: "create event",
+                      Get.off(const Home());
+                    }
+                  },
+                  text: "create event",
+                ),
               )
             ]),
           ),

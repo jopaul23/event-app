@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 
 class EventController extends GetxController {
   List<Event> eventList = [];
+  Event? currentEvent;
   getEvents() async {
     eventList = await EventApi.getEvents();
     update();

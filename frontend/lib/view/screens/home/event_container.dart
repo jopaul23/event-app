@@ -35,8 +35,7 @@ class EventContainer extends StatelessWidget {
           ),
         Container(
           margin: const EdgeInsets.only(top: defaultPadding),
-          padding: const EdgeInsets.all(8),
-          height: 70,
+          padding: const EdgeInsets.all(defaultPadding),
           width: double.infinity,
           decoration: BoxDecoration(
               color: white,
@@ -75,7 +74,17 @@ class EventContainer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    width: 250,
+                    child: Text(
+                      eventList[index].school,
+                      maxLines: 4,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],

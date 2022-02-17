@@ -3,12 +3,12 @@ import 'package:event_creation/controllers/event_controller.dart';
 import 'package:event_creation/view/constants/constants.dart';
 import 'package:event_creation/view/screens/home/endEventOverlay/end_event_overlay.dart';
 import 'package:event_creation/view/widgets/buttons/square_btn.dart';
+import 'package:event_creation/view/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CurrentEventContainer extends StatefulWidget {
   const CurrentEventContainer({Key? key}) : super(key: key);
@@ -67,16 +67,21 @@ class _CurrentEventContainerState extends State<CurrentEventContainer> {
               height: 5,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SvgPicture.asset("assets/svg/school.svg"),
                 const SizedBox(
                   width: 8,
                 ),
-                Text(
-                  eventAddController.school,
-                  style: TextStyle(
-                    color: primaryBlue,
-                    fontSize: 14.sp,
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    eventAddController.school,
+                    style: TextStyle(
+                      color: primaryBlue,
+                      fontSize: 14.sp,
+                    ),
+                    maxLines: 3,
                   ),
                 ),
               ],
@@ -141,6 +146,12 @@ class _CurrentEventContainerState extends State<CurrentEventContainer> {
                   text: "cancel",
                   onPressed: () {
                     eventAddController.reset();
+                    showToast(
+                        context: Get.overlayContext!,
+                        title: "event cancelled successfully",
+                        description: "",
+                        icon: "assets/svg/tick.svg",
+                        color: primaryBlue);
                     eventAddController.update();
                   },
                 )

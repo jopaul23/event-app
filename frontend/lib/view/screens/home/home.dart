@@ -45,33 +45,39 @@ class Home extends StatelessWidget {
               const Spacer(),
               SquareButton(
                 onPressed: () async {
-                  eventAddController.endingTime = DateTime.now();
-                  if (eventAddController.endingTime
-                      .isBefore(eventAddController.startingTime)) {
-                    showToast(
-                      context: context,
-                      title: "ending time should be after starting time",
-                      description: "",
-                      icon: "assets/svg/warning.svg",
-                      color: toastYellow,
-                    );
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.clear();
+                  if (eventAddController.eventName == "") {
+                    Get.off(() => const SigninPage());
                   } else {
-                    Position location =
-                        await EventAddController.determinePosition();
-                    eventAddController.endingLocation =
-                        "${location.latitude},${location.longitude}";
-                    eventAddController.addEvent();
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    Future.delayed(Duration(seconds: 10)).whenComplete(() {
-                      prefs.clear();
-                    });
-                  }
+                    eventAddController.endingTime = DateTime.now();
 
-                  Get.off(() => const SigninPage());
+                    if (eventAddController.endingTime
+                        .isBefore(eventAddController.startingTime)) {
+                      showToast(
+                        context: context,
+                        title: "ending time should be after starting time",
+                        description: "",
+                        icon: "assets/svg/warning.svg",
+                        color: toastYellow,
+                      );
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.clear();
+                    } else {
+                      Position location =
+                          await EventAddController.determinePosition();
+                      eventAddController.endingLocation =
+                          "${location.latitude},${location.longitude}";
+                      eventAddController.addEvent();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      Future.delayed(const Duration(seconds: 10))
+                          .whenComplete(() {
+                        prefs.clear();
+                      });
+                    }
+
+                    Get.off(() => const SigninPage());
+                  }
                 },
                 text: "logout",
                 color: red,
